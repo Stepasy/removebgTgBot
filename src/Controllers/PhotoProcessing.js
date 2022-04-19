@@ -1,6 +1,7 @@
 import FormData from 'form-data';
 import axios from 'axios';
 import Controller from './Controller';
+import { messages } from '../lang/ua';
 
 export default class PhotoProcessing extends Controller {
   message = null;
@@ -39,14 +40,14 @@ export default class PhotoProcessing extends Controller {
           await this.bot.sendPhoto(this.chatId, removeBgResponse.data);
         } catch (e) {
           if (e.response.status === 403) {
-            await this.bot.sendMessage(this.chatId, 'Неверный API токен. /register для добавления нового.');
+            await this.bot.sendMessage(this.chatId, messages.invalidToken);
 
             return;
           }
 
           const errorsArray = e.response.data.errors.map(error => `${error.title}: ${error.code}`);
 
-          await this.bot.sendMessage(this.chatId, `Ошибка запроса. ${errorsArray.join('. ')}`);
+          await this.bot.sendMessage(this.chatId, messages.requestError.replace(':error', errorsArray.join('. ')));
         }
       });
     });

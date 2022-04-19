@@ -1,12 +1,13 @@
 import Controller from './Controller';
 import StorageController from './StorageController';
+import { messages } from '../lang/ua';
 
 export default class RegisterController extends Controller {
   init() {
     this.bot.onText(/\/register/, (message) => {
       const chatId = message.chat.id;
 
-      this.bot.sendMessage(chatId, 'Вставь API-ключ');
+      this.bot.sendMessage(chatId, messages.registerStart);
     });
 
     this.bot.on('message', async (message) => {
@@ -23,7 +24,7 @@ export default class RegisterController extends Controller {
         data[userId] = apiToken;
 
         StorageController.setFileContent(data, () => {
-          this.bot.sendMessage(chatId, 'Успех. Можешь пользоваться ботом. Для проверки, сколько у тебя осталось запросов, напиши /remains');
+          this.bot.sendMessage(chatId, messages.registerSuccess);
         });
       });
     });

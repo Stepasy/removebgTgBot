@@ -1,5 +1,6 @@
 import Controller from './Controller';
 import axios from 'axios';
+import { messages } from '../lang/ua';
 
 export default class RequestsRemainController extends Controller {
   init() {
@@ -19,17 +20,17 @@ export default class RequestsRemainController extends Controller {
 
           const requestsAmount = removeBgResponse.data.data.attributes.api.free_calls;
 
-          await this.bot.sendMessage(chatId, `Осталось запросов: ${requestsAmount}. Для обновления токена - /register`);
+          await this.bot.sendMessage(chatId, messages.requestRemains.replace(':requestsAmount', requestsAmount));
         } catch (e) {
           if (e.response.status === 403) {
-            await this.bot.sendMessage(chatId, 'Неверный API токен. /register для добавления нового.');
+            await this.bot.sendMessage(chatId, messages.invalidToken);
 
             return;
           }
 
           const errorsArray = e.response.data.errors.map(error => `${error.title}: ${error.code}`);
 
-          await this.bot.sendMessage(chatId, `Ошибка запроса. ${errorsArray.join('. ')}`);
+          await this.bot.sendMessage(chatId, messages.requestError.replace(':error', errorsArray.join('. ')));
         }
       });
     });

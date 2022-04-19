@@ -1,4 +1,5 @@
 import StorageController from './StorageController';
+import { messages } from '../lang/ua';
 
 export default class Controller {
   bot = null;
@@ -10,7 +11,7 @@ export default class Controller {
   async getUserToken({ chatId, userId }, callback) {
     StorageController.getFileContent((data) => {
       if (! data[userId]) {
-        this.bot.sendMessage(chatId, 'Ключ не обнаружен. Напишите /start и проследуйте инструкциям.');
+        this.bot.sendMessage(chatId, messages.noToken);
 
         return;
       }
